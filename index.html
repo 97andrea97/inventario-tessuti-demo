@@ -79,6 +79,17 @@ button.export{font:inherit;font-weight:700;font-size:14px;background:var(--gold)
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--green);color:#fff;padding:12px 22px;border-radius:10px;font-weight:600;font-size:14px;z-index:30;transition:.3s;box-shadow:0 6px 24px rgba(0,0,0,.2)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 @media(max-width:640px){.grid2{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.hide-m{display:none}main{padding:14px 12px 50px}.hero-val{font-size:54px}}
+/* ===== CATALOGO ===== */
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.tcard{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:.15s;display:flex;flex-direction:column}
+.tcard:hover{box-shadow:0 6px 18px rgba(0,0,0,.09);transform:translateY(-2px)}
+.tcard .swatch{height:108px;display:flex;align-items:flex-end;padding:8px}
+.tcard .swatch .tt{font-size:11px;font-weight:700;color:#fff;background:rgba(0,0,0,.30);padding:2px 9px;border-radius:20px}
+.tcard .body{padding:11px 13px}
+.tcard .cod{font-weight:800;font-size:14px}
+.tcard .meta{font-size:12px;color:var(--muted);margin-top:2px}
+.tcard .gx{display:flex;justify-content:space-between;align-items:center;margin-top:9px;font-size:12.5px}
+.tcard .gx b{color:var(--navy);font-size:14px}
 </style></head>
 <body>
 <div class="demo-bar">⚙️ <b>DEMO</b> — dati di esempio inventati · alcune funzioni sono ancora da implementare (anteprima del risultato)</div>
@@ -86,6 +97,7 @@ button.export{font:inherit;font-weight:700;font-size:14px;background:var(--gold)
   <div class="brand"><span class="dot"></span>St.&nbsp;Remy <small>Inventario Tessuti</small></div>
   <nav>
     <button id="nav-mis" class="active" onclick="show('mis')">Misurazione</button>
+    <button id="nav-cat" onclick="show('cat')">Catalogo</button>
     <button id="nav-isp" onclick="show('isp')">Ispezione magazzino</button>
   </nav>
 </header>
@@ -159,6 +171,17 @@ button.export{font:inherit;font-weight:700;font-size:14px;background:var(--gold)
   <table><thead><tr>
     <th>Codice</th><th>Descrizione</th><th class="hide-m">Fornitore</th><th class="hide-m">Gramm.</th><th>Posizione</th><th>Giacenza</th><th>Stato</th>
   </tr></thead><tbody id="tbody"></tbody></table>
+</section>
+
+<!-- ===== CATALOGO ===== -->
+<section id="cat" class="view">
+  <h1>Catalogo tessuti</h1>
+  <div class="sub">Sfoglia i tessuti con <b>foto</b>, dati e giacenza. Clicca una scheda per il dettaglio.</div>
+  <div class="filters">
+    <input id="cq" placeholder="🔍 cerca codice o descrizione…" oninput="renderCat()">
+    <select id="ctipo" onchange="renderCat()"><option value="">Tutti i tipi</option></select>
+  </div>
+  <div class="catgrid" id="catGrid"></div>
 </section>
 </main>
 
@@ -237,7 +260,7 @@ function renderTable(){const rows=filtered();const tb=document.getElementById('t
 }
 function openM(d){const m=document.getElementById('mbody');
   m.innerHTML=`<span class="close" onclick="closeM()">×</span><h3>${d.cod} — ${d.tipo}</h3><div class="muted">${d.forn}</div>
-  <div class="ph"><span>foto rotolo (demo)</span></div>
+  <div class="ph" style="background:${colorFor(d.tipo)}"><span>foto (demo)</span></div>
   <div class="kv"><span>Grammatura</span><b>${d.gram} g/m²</b></div>
   <div class="kv"><span>Posizione</span><b>Scaffale ${d.scaf} · Box ${d.box}</b></div>
   <div class="kv"><span>Stato</span><b>${d.misurato?'Misurato':'Da misurare'}</b></div>
@@ -245,19 +268,33 @@ function openM(d){const m=document.getElementById('mbody');
   <div class="kv" style="border:none"><span>Storico pesate</span><b>${d.misurato?'1 misura':'nessuna'}</b></div>`;
   document.getElementById('mbg').classList.add('show');}
 function closeM(){document.getElementById('mbg').classList.remove('show');}
-function exportCSV(){const rows=filtered();let csv='Codice,Descrizione,Fornitore,Grammatura,Scaffale,Box,Giacenza_m2,Stato\\n';
-  rows.forEach(d=>csv+=`${d.cod},${d.tipo},${d.forn},${d.gram},${d.scaf},${d.box},${d.misurato?d.mq:''},${d.misurato?'misurato':'da misurare'}\\n`);
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='inventario_stremy_demo.csv';a.click();toast('✓ Dati esportati in Excel');}
+function exportCSV(){const rows=filtered();const NL=String.fromCharCode(10);
+  let csv='Codice,Descrizione,Fornitore,Grammatura,Scaffale,Box,Giacenza_m2,Stato'+NL;
+  rows.forEach(d=>csv+=[d.cod,d.tipo,d.forn,d.gram,d.scaf,d.box,(d.misurato?d.mq:''),(d.misurato?'misurato':'da misurare')].join(',')+NL);
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([String.fromCharCode(0xFEFF)+csv],{type:'text/csv;charset=utf-8'}));a.download='inventario_stremy_demo.csv';a.click();toast('✓ Dati esportati in Excel');}
+
+// ---- CATALOGO ----
+const TCOL={Lana:['#a07c4f','#c8a978'],Cotone:['#6c93b8','#a8c6df'],Lino:['#b6a07a','#d8c8a8'],Seta:['#7d5a93','#b08fc4'],Cashmere:['#9a8c7a','#c4b6a3'],Velluto:['#7a2e3a','#a8505e'],Gabardine:['#33506e','#5d7a98'],Flanella:['#6f7479','#9aa0a6'],Tweed:['#5e6b4a','#8a9670'],Popeline:['#2f7d76','#5aa39c']};
+function colorFor(t){const c=TCOL[t]||['#888','#bbb'];return 'linear-gradient(135deg,'+c[0]+','+c[1]+')';}
+const cT=document.getElementById('ctipo');[...new Set(data.map(d=>d.tipo))].sort().forEach(t=>cT.innerHTML+=`<option>${t}</option>`);
+function catFiltered(){const q=document.getElementById('cq').value.toLowerCase(),t=document.getElementById('ctipo').value;
+  return data.filter(d=>(!q||(d.cod+d.tipo+d.forn).toLowerCase().includes(q))&&(!t||d.tipo===t));}
+function renderCat(){const g=document.getElementById('catGrid');const rows=catFiltered();g.innerHTML='';
+  rows.forEach(d=>{const c=document.createElement('div');c.className='tcard';c.onclick=()=>openM(d);
+    const gic=d.misurato?`<b>${d.mq.toLocaleString('it-IT')} m²</b>`:`<span class="pill d">da misurare</span>`;
+    c.innerHTML=`<div class="swatch" style="background:${colorFor(d.tipo)}"><span class="tt">${d.tipo}</span></div><div class="body"><div class="cod">${d.cod}</div><div class="meta">${d.forn} · ${d.gram} g/m²</div><div class="gx"><span>Scaff. ${d.scaf}·${d.box}</span>${gic}</div></div>`;
+    g.appendChild(c);});
+}
 
 // ---- NAV / util ----
 function show(v){document.querySelectorAll('.view').forEach(s=>s.classList.remove('active'));document.getElementById(v).classList.add('active');
-  document.getElementById('nav-mis').classList.toggle('active',v==='mis');document.getElementById('nav-isp').classList.toggle('active',v==='isp');
-  if(v==='isp')renderTable();window.scrollTo(0,0);}
+  ['mis','cat','isp'].forEach(k=>document.getElementById('nav-'+k).classList.toggle('active',v===k));
+  if(v==='isp')renderTable(); if(v==='cat')renderCat(); window.scrollTo(0,0);}
 let tt;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2200);}
 
 // pre-carica un rotolo già misurato così la giacenza si vede subito
 const first=data.slice().sort((a,b)=>a.cod<b.cod?-1:1).find(r=>r.misurato);
 if(first){selR.value=first.cod;onRotolo();}
-renderTable();
+renderTable();renderCat();
 </script>
 </body></html>
