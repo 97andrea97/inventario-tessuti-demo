@@ -4,9 +4,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>St.Remy · Inventario Tessuti — Demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{--gold:#B8960C;--gold-d:#9A7B0A;--navy:#1E3A5F;--green:#2D6A4F;--green-bg:#EAF6EF;--red:#B0413E;--red-bg:#FBEEED;
+:root{--gold:#B8960C;--gold-d:#9A7B0A;--navy:#1E3A5F;--navy2:#27496d;--green:#2D6A4F;--green-bg:#EAF6EF;--red:#B0413E;--red-bg:#FBEEED;
 --bg:#F4F3EF;--card:#fff;--border:#E2DFD7;--text:#1A1A1A;--muted:#70706A;}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
@@ -22,25 +22,34 @@ nav button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
 main{max-width:1000px;margin:0 auto;padding:20px 16px 60px}
 .view{display:none}.view.active{display:block}
 h1{font-size:20px;font-weight:800;margin-bottom:3px}
-.sub{color:var(--muted);font-size:13px;margin-bottom:18px}
+.sub{color:var(--muted);font-size:13.5px;margin-bottom:18px}.sub b{color:var(--gold-d)}
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
 input,select{width:100%;font:inherit;font-size:15px;padding:11px 12px;border:1px solid var(--border);border-radius:9px;background:#fff;color:var(--text)}
-input:focus,select:focus{outline:none;border-color:var(--gold)}
+input:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,150,12,.13)}
+#peso{font-size:20px;font-weight:700}
 .field{margin-bottom:14px}
 .info{background:#FBFAF5;border:1px solid var(--border);border-radius:9px;padding:11px 13px;font-size:13px;color:#444;display:flex;flex-wrap:wrap;gap:4px 18px}
 .info span b{color:var(--navy)}
-.calc{background:var(--navy);color:#fff;border-radius:12px;padding:16px 18px;display:flex;justify-content:space-around;gap:14px;margin:6px 0 4px}
-.calc div{text-align:center}.calc .lab{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;opacity:.8;margin-bottom:3px}
-.calc .val{font-size:26px;font-weight:800;line-height:1}.calc .val small{font-size:13px;font-weight:600;opacity:.85}
+
+/* ===== HERO GIACENZA (protagonista) ===== */
+.hero{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:16px;padding:26px 20px 22px;text-align:center;margin:18px 0 6px;box-shadow:0 10px 30px rgba(30,58,95,.22);position:relative;overflow:hidden}
+.hero-lab{color:#cfe0f2;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;margin-bottom:6px;display:flex;align-items:center;justify-content:center;gap:7px}
+.hero-lab .auto{background:var(--gold);color:#1a1a1a;font-size:10px;padding:2px 8px;border-radius:20px;letter-spacing:.3px}
+.hero-val{font-size:68px;font-weight:900;line-height:.95;color:#fff;letter-spacing:-1px}
+.hero-val .u{font-size:26px;font-weight:700;color:#F0D98A}
+.hero-sub{color:#aac3de;font-size:13px;margin-top:8px}.hero-sub b{color:#fff}
+@keyframes pop{0%{transform:scale(1)}35%{transform:scale(1.09)}100%{transform:scale(1)}}
+.hero.flash .hero-val{animation:pop .45s ease;color:#F0D98A}
+.chk{display:flex;align-items:center;gap:8px;text-transform:none;font-size:13.5px;color:#333;margin:2px 0 4px;font-weight:500}
+.chk input{width:auto}
 .warn{background:var(--red-bg);border:1px solid #E6B3B1;color:var(--red);border-radius:9px;padding:9px 12px;font-size:13px;font-weight:600;margin:8px 0;display:none}
 .warn.show{display:block}
-.ok{background:var(--green-bg);border:1px solid #A8D5BD;color:var(--green)}
-.row-btns{display:flex;gap:10px;margin-top:8px}
+.row-btns{display:flex;gap:10px;margin-top:14px}
 button.primary{font:inherit;font-weight:700;font-size:14px;background:var(--gold);color:#1a1a1a;border:none;padding:12px 20px;border-radius:9px;cursor:pointer}
 button.ghost{font:inherit;font-weight:600;font-size:14px;background:#fff;color:var(--navy);border:1px solid var(--border);padding:12px 18px;border-radius:9px;cursor:pointer}
-.photo{border:1.5px dashed var(--border);border-radius:9px;padding:18px;text-align:center;color:var(--muted);font-size:13px;cursor:pointer;background:#FBFAF5}
+.photo{border:1.5px dashed var(--border);border-radius:9px;padding:14px;text-align:center;color:var(--muted);font-size:13px;cursor:pointer;background:#FBFAF5}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
 .stat .n{font-size:24px;font-weight:800;color:var(--navy)}
@@ -54,9 +63,10 @@ td{padding:10px 12px;border-bottom:1px solid var(--border)}
 tr.r{cursor:pointer}tr.r:hover{background:#FBFAF5}
 .pill{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;display:inline-block}
 .pill.m{background:var(--green-bg);color:var(--green)}.pill.d{background:#FBF3E0;color:var(--gold-d)}
-.pill.a{background:var(--red-bg);color:var(--red)}
 .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap}
 .muted{color:var(--muted);font-size:12.5px}
+button.export{font:inherit;font-weight:700;font-size:14px;background:var(--gold);color:#1a1a1a;border:none;padding:11px 18px;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 3px 10px rgba(184,150,12,.25)}
+.export-note{font-size:11.5px;color:var(--gold-d);font-weight:600;margin-top:4px;text-align:right}
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(20,20,20,.5);z-index:20;align-items:center;justify-content:center;padding:16px}
 .modal-bg.show{display:flex}
 .modal{background:#fff;border-radius:14px;max-width:460px;width:100%;padding:22px;max-height:90vh;overflow:auto}
@@ -68,7 +78,7 @@ tr.r{cursor:pointer}tr.r:hover{background:#FBFAF5}
 .close{float:right;cursor:pointer;color:var(--muted);font-size:22px;line-height:1}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--green);color:#fff;padding:12px 22px;border-radius:10px;font-weight:600;font-size:14px;z-index:30;transition:.3s;box-shadow:0 6px 24px rgba(0,0,0,.2)}
 .toast.show{transform:translateX(-50%) translateY(0)}
-@media(max-width:640px){.grid2{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.hide-m{display:none}main{padding:14px 12px 50px}}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.hide-m{display:none}main{padding:14px 12px 50px}.hero-val{font-size:54px}}
 </style></head>
 <body>
 <div class="demo-bar">⚙️ <b>DEMO</b> — dati di esempio inventati · alcune funzioni sono ancora da implementare (anteprima del risultato)</div>
@@ -84,48 +94,50 @@ tr.r{cursor:pointer}tr.r:hover{background:#FBFAF5}
 <!-- ===== MISURAZIONE ===== -->
 <section id="mis" class="view active">
   <h1>Misurazione rotolo</h1>
-  <div class="sub">Seleziona il rotolo, pesalo, e la giacenza in m² è calcolata in automatico.</div>
+  <div class="sub">Inserisci il <b>peso</b> del rotolo: la <b>giacenza in m² si calcola da sola</b>, in tempo reale.</div>
   <div class="card">
     <div class="field">
       <label>Rotolo (cerca per codice o descrizione)</label>
-      <select id="rotolo" onchange="onRotolo()"><option value="">— seleziona —</option></select>
+      <select id="rotolo" onchange="onRotolo()"></select>
     </div>
     <div id="rotInfo" class="info" style="display:none"></div>
 
     <div class="grid2" style="margin-top:14px">
-      <div class="field"><label>Peso lordo (kg)</label><input id="peso" type="number" step="0.01" placeholder="es. 14,50" oninput="calc()"></div>
+      <div class="field"><label>⚖️ Peso lordo (kg)</label><input id="peso" type="number" step="0.01" placeholder="es. 14,50" oninput="calc()"></div>
       <div class="field"><label>Tipo anima</label><select id="anima" onchange="calc()">
         <option value="300">Cartone leggero (300 g)</option>
         <option value="500" selected>Cartone medio (500 g)</option>
         <option value="800">Cartone pesante (800 g)</option>
       </select></div>
     </div>
-    <label style="display:flex;align-items:center;gap:8px;text-transform:none;font-size:13.5px;color:#333;margin-bottom:12px;font-weight:500">
-      <input type="checkbox" id="appoggiato" style="width:auto" onchange="calc()"> Rotolo appoggiato al muro durante la pesata (correzione)
-    </label>
+    <label class="chk"><input type="checkbox" id="appoggiato" onchange="calc()"> Rotolo appoggiato al muro durante la pesata (correzione)</label>
 
-    <div class="calc">
-      <div><div class="lab">Peso netto</div><div class="val" id="netto">—</div></div>
-      <div><div class="lab">Giacenza calcolata</div><div class="val" id="mq">— <small>m²</small></div></div>
+    <!-- HERO: la giacenza è il protagonista -->
+    <div class="hero" id="hero">
+      <div class="hero-lab">Giacenza <span class="auto">CALCOLATA IN AUTOMATICO</span></div>
+      <div class="hero-val"><span id="mq">—</span> <span class="u">m²</span></div>
+      <div class="hero-sub">dal peso netto di <b id="netto">—</b> · si aggiorna mentre digiti</div>
     </div>
     <div class="warn" id="warn"></div>
 
-    <div class="field" style="margin-top:14px"><label>Foto (rotolo / display bilancia)</label>
-      <div class="photo" onclick="toast('📷 In demo la fotocamera è simulata')">📷 Scatta o carica una foto</div></div>
-    <div class="field"><label>Note</label><input id="note" placeholder="facoltative"></div>
+    <div class="grid2" style="margin-top:14px">
+      <div class="field" style="margin:0"><label>Foto (rotolo / display bilancia)</label>
+        <div class="photo" onclick="toast('📷 In demo la fotocamera è simulata')">📷 Scatta o carica una foto</div></div>
+      <div class="field" style="margin:0"><label>Note</label><input id="note" placeholder="facoltative"></div>
+    </div>
 
     <div class="row-btns">
-      <button class="primary" onclick="salva()">Salva</button>
-      <button class="ghost" onclick="salva(true)">Salva e nuovo</button>
+      <button class="primary" onclick="salva()">Salva giacenza</button>
+      <button class="ghost" onclick="salva(true)">Salva e nuovo rotolo</button>
     </div>
   </div>
-  <p class="muted" style="margin-top:12px">La formula esatta (grammatura, peso anime, correzione) sarà tarata con qualche prova reale: qui sono valori d'esempio.</p>
+  <p class="muted" style="margin-top:12px">Prova a cambiare il peso qui sopra e guarda la giacenza aggiornarsi. La formula esatta (grammatura, peso anime, correzione) sarà tarata con qualche prova reale: qui sono valori d'esempio.</p>
 </section>
 
 <!-- ===== ISPEZIONE ===== -->
 <section id="isp" class="view">
   <h1>Ispezione magazzino</h1>
-  <div class="sub">Cerca e filtra i tessuti, consulta le giacenze. Sola consultazione.</div>
+  <div class="sub">Cerca e filtra i tessuti, consulta le giacenze ed <b>esporta i dati in Excel</b>. Sola consultazione.</div>
   <div class="stats">
     <div class="stat"><div class="n" id="stTot">—</div><div class="l">m² totali (filtrati)</div></div>
     <div class="stat"><div class="n" id="stN">—</div><div class="l">rotoli mostrati</div></div>
@@ -139,7 +151,10 @@ tr.r{cursor:pointer}tr.r:hover{background:#FBFAF5}
   </div>
   <div class="toolbar">
     <span class="muted" id="aggr"></span>
-    <button class="ghost" onclick="exportCSV()">⬇ Export CSV</button>
+    <div style="text-align:right">
+      <button class="export" onclick="exportCSV()">⬇ Esporta in Excel</button>
+      <div class="export-note">scarica i dati filtrati come file Excel</div>
+    </div>
   </div>
   <table><thead><tr>
     <th>Codice</th><th>Descrizione</th><th class="hide-m">Fornitore</th><th class="hide-m">Gramm.</th><th>Posizione</th><th>Giacenza</th><th>Stato</th>
@@ -168,6 +183,7 @@ for(let i=0;i<32;i++){
 
 // ---- MISURAZIONE ----
 const selR=document.getElementById('rotolo');
+selR.innerHTML='<option value="">— seleziona un rotolo —</option>';
 data.slice().sort((a,b)=>a.cod<b.cod?-1:1).forEach(r=>{const o=document.createElement('option');o.value=r.cod;o.textContent=`${r.cod} · ${r.tipo} (${r.gram} g/m²)`;selR.appendChild(o);});
 function cur(){return data.find(r=>r.cod===selR.value);}
 function onRotolo(){const r=cur();const el=document.getElementById('rotInfo');
@@ -176,16 +192,18 @@ function onRotolo(){const r=cur();const el=document.getElementById('rotInfo');
   document.getElementById('peso').value = r.misurato? r.pesoL : '';
   if(r.misurato){document.getElementById('anima').value=r.anima;document.getElementById('appoggiato').checked=r.app;}
   calc();}
+let lastMq='';
 function calc(){const r=cur();const peso=parseFloat(document.getElementById('peso').value);
   const anima=+document.getElementById('anima').value;const app=document.getElementById('appoggiato').checked;
-  const w=document.getElementById('warn');w.className='warn';
-  if(!r||isNaN(peso)){document.getElementById('netto').textContent='—';document.getElementById('mq').innerHTML='— <small>m²</small>';return;}
+  const w=document.getElementById('warn');w.className='warn';const hero=document.getElementById('hero');
+  if(!r||isNaN(peso)){document.getElementById('netto').textContent='—';document.getElementById('mq').textContent='—';lastMq='';return;}
   let netto=peso*1000-anima; if(app)netto*=0.985;
-  if(netto<=0){document.getElementById('netto').textContent='—';document.getElementById('mq').innerHTML='— <small>m²</small>';
-    w.className='warn show';w.textContent='⚠ Il peso lordo è inferiore al peso dell\\'anima: controlla i dati.';return;}
-  const mq=netto/r.gram;
-  document.getElementById('netto').innerHTML=(netto/1000).toFixed(2)+' <small>kg</small>';
-  document.getElementById('mq').innerHTML=mq.toFixed(1)+' <small>m²</small>';
+  if(netto<=0){document.getElementById('netto').textContent='—';document.getElementById('mq').textContent='—';lastMq='';
+    w.className='warn show';w.textContent='⚠ Il peso lordo è inferiore al peso del cartone (anima): controlla i dati.';return;}
+  const mq=netto/r.gram;const mqTxt=mq.toLocaleString('it-IT',{minimumFractionDigits:1,maximumFractionDigits:1});
+  document.getElementById('netto').textContent=(netto/1000).toFixed(2)+' kg';
+  document.getElementById('mq').textContent=mqTxt;
+  if(mqTxt!==lastMq){hero.classList.remove('flash');void hero.offsetWidth;hero.classList.add('flash');lastMq=mqTxt;}
   if(mq>180){w.className='warn show';w.textContent='⚠ Giacenza insolitamente alta per questo tessuto: verifica la pesata.';}
 }
 function salva(nuovo){const r=cur();const peso=parseFloat(document.getElementById('peso').value);
@@ -194,7 +212,7 @@ function salva(nuovo){const r=cur();const peso=parseFloat(document.getElementByI
   if(netto<=0){toast('Controlla i dati: peso troppo basso');return;}
   r.misurato=true;r.pesoL=peso;r.anima=+document.getElementById('anima').value;r.app=document.getElementById('appoggiato').checked;
   r.netto=netto;r.mq=+(netto/r.gram).toFixed(1);
-  toast('✓ Giacenza salvata: '+r.mq+' m²');
+  toast('✓ Giacenza salvata: '+r.mq.toLocaleString('it-IT')+' m²');
   if(nuovo){selR.value='';onRotolo();document.getElementById('note').value='';}
 }
 
@@ -206,14 +224,13 @@ function filtered(){const q=document.getElementById('fq').value.toLowerCase(),t=
 function renderTable(){const rows=filtered();const tb=document.getElementById('tbody');tb.innerHTML='';
   rows.forEach(d=>{const tr=document.createElement('tr');tr.className='r';tr.onclick=()=>openM(d);
     const stato=d.misurato?'<span class="pill m">misurato</span>':'<span class="pill d">da misurare</span>';
-    tr.innerHTML=`<td><b>${d.cod}</b></td><td>${d.tipo}</td><td class="hide-m">${d.forn}</td><td class="hide-m">${d.gram} g/m²</td><td>${d.scaf}·${d.box}</td><td>${d.misurato?'<b>'+d.mq+'</b> m²':'—'}</td><td>${stato}</td>`;
+    tr.innerHTML=`<td><b>${d.cod}</b></td><td>${d.tipo}</td><td class="hide-m">${d.forn}</td><td class="hide-m">${d.gram} g/m²</td><td>${d.scaf}·${d.box}</td><td>${d.misurato?'<b>'+d.mq.toLocaleString('it-IT')+'</b> m²':'—'}</td><td>${stato}</td>`;
     tb.appendChild(tr);});
   const tot=rows.filter(r=>r.misurato).reduce((a,b)=>a+b.mq,0);
   const mis=data.filter(d=>d.misurato).length, av=Math.round(mis/data.length*100);
   document.getElementById('stTot').textContent=tot.toLocaleString('it-IT',{maximumFractionDigits:0});
   document.getElementById('stN').textContent=rows.length;
   document.getElementById('stAv').textContent=mis+'/'+data.length;document.getElementById('stBar').style.width=av+'%';
-  // aggregati per tipo
   const byT={};rows.filter(r=>r.misurato).forEach(r=>byT[r.tipo]=(byT[r.tipo]||0)+r.mq);
   const top=Object.entries(byT).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>`${k}: ${v.toFixed(0)} m²`).join(' · ');
   document.getElementById('aggr').textContent= top? 'Top per tipo → '+top : '';
@@ -224,19 +241,23 @@ function openM(d){const m=document.getElementById('mbody');
   <div class="kv"><span>Grammatura</span><b>${d.gram} g/m²</b></div>
   <div class="kv"><span>Posizione</span><b>Scaffale ${d.scaf} · Box ${d.box}</b></div>
   <div class="kv"><span>Stato</span><b>${d.misurato?'Misurato':'Da misurare'}</b></div>
-  ${d.misurato?`<div class="kv"><span>Peso lordo</span><b>${d.pesoL} kg</b></div><div class="kv"><span>Anima</span><b>${ANIME[d.anima]}</b></div><div class="kv"><span>Giacenza</span><b>${d.mq} m²</b></div>`:''}
+  ${d.misurato?`<div class="kv"><span>Peso lordo</span><b>${d.pesoL} kg</b></div><div class="kv"><span>Anima</span><b>${ANIME[d.anima]}</b></div><div class="kv"><span>Giacenza</span><b>${d.mq.toLocaleString('it-IT')} m²</b></div>`:''}
   <div class="kv" style="border:none"><span>Storico pesate</span><b>${d.misurato?'1 misura':'nessuna'}</b></div>`;
   document.getElementById('mbg').classList.add('show');}
 function closeM(){document.getElementById('mbg').classList.remove('show');}
 function exportCSV(){const rows=filtered();let csv='Codice,Descrizione,Fornitore,Grammatura,Scaffale,Box,Giacenza_m2,Stato\\n';
   rows.forEach(d=>csv+=`${d.cod},${d.tipo},${d.forn},${d.gram},${d.scaf},${d.box},${d.misurato?d.mq:''},${d.misurato?'misurato':'da misurare'}\\n`);
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='inventario_stremy_demo.csv';a.click();toast('CSV esportato');}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='inventario_stremy_demo.csv';a.click();toast('✓ Dati esportati in Excel');}
 
 // ---- NAV / util ----
 function show(v){document.querySelectorAll('.view').forEach(s=>s.classList.remove('active'));document.getElementById(v).classList.add('active');
   document.getElementById('nav-mis').classList.toggle('active',v==='mis');document.getElementById('nav-isp').classList.toggle('active',v==='isp');
   if(v==='isp')renderTable();window.scrollTo(0,0);}
 let tt;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2200);}
+
+// pre-carica un rotolo già misurato così la giacenza si vede subito
+const first=data.slice().sort((a,b)=>a.cod<b.cod?-1:1).find(r=>r.misurato);
+if(first){selR.value=first.cod;onRotolo();}
 renderTable();
 </script>
 </body></html>
